@@ -1,6 +1,21 @@
 // 載入 express 並建構應用程式
 const express = require('express') // 1載入 express 模組
+const mongoose = require('mongoose')
+const db = mongoose.connection
+
 const app = express() // 2呼叫 express() 來啟動應用程式伺服器
+
+mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
+
+// 
+db.on('error', () => {
+  console.log('mongoose error!')
+})
+
+db.once('open', () => {
+  console.log('mongodb connected!')
+})
+
 
 // 4 => 設定路由
 app.get('/', (req, res) => {
