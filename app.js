@@ -7,7 +7,6 @@ const app = express() // 2呼叫 express() 來啟動應用程式伺服器
 
 mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
 
-// 
 db.on('error', () => {
   console.log('mongoose error!')
 })
