@@ -1,5 +1,6 @@
 // 載入 express 並建構應用程式
 const express = require('express') // 1載入 express 模組
+const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
 const db = mongoose.connection
 
@@ -15,10 +16,13 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+// Setting Hnadlebars
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.set('view engine', 'hbs')
 
-// 4 => 設定路由
+// 4 => 設定 首頁 路由
 app.get('/', (req, res) => {
-  res.send('Hello world!!')
+  res.render('index')
 })
 
 // 3 => 設定 port 3000
