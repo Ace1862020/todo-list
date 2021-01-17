@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const todoSchema = new Schema({
   name: {
     type: String,
-    required: true //必填欄位
+    required: true
   }
 })
 

@@ -1,8 +1,11 @@
 // 載入 express 並建構應用程式
 const express = require('express') // 1載入 express 模組
 const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const db = mongoose.connection
+
+const Todo = require('./models/todo')
 
 const app = express() // 2呼叫 express() 來啟動應用程式伺服器
 
@@ -11,7 +14,6 @@ mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUn
 db.on('error', () => {
   console.log('mongoose error!')
 })
-
 db.once('open', () => {
   console.log('mongodb connected!')
 })
@@ -20,9 +22,27 @@ db.once('open', () => {
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+// Setting body-parser
+app.use(bodyParser.urlencoded({ extended: true }))
+
 // 4 => 設定 首頁 路由
 app.get('/', (req, res) => {
-  res.render('index')
+  Todo.find()
+    .lean()
+    .then(todos => res.render('index', { todos }))
+    .catch(error => console.error(error))
+})
+
+// Create New todo to new-Page
+app.get('/todos/new', (req, res) => {
+  return res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name
+  return Todo.create({ name })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 
 // 3 => 設定 port 3000
