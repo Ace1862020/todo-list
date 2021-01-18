@@ -3,21 +3,13 @@ const express = require('express') // 1載入 express 模組
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
-const mongoose = require('mongoose')
-const db = mongoose.connection
 
 const routes = require('./routes')
+// 由於Mongoose 連線設定只需要「被執行」
+// 所以不會接到任何回傳參數繼續利用，所以不需要再設定變數
+require('./config/mongoose')
 
 const app = express() // 2呼叫 express() 來啟動應用程式伺服器
-
-mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
-
-db.on('error', () => {
-  console.log('mongoose error!')
-})
-db.once('open', () => {
-  console.log('mongodb connected!')
-})
 
 // Setting Hnadlebars
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
