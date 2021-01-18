@@ -6,8 +6,7 @@ const methodOverride = require('method-override')
 const mongoose = require('mongoose')
 const db = mongoose.connection
 
-const Todo = require('./models/todo')
-const { findById } = require('./models/todo')
+const routes = require('./routes')
 
 const app = express() // 2呼叫 express() 來啟動應用程式伺服器
 
@@ -30,65 +29,18 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Setting Method-override
 app.use(methodOverride('_method'))
 
-// 4 => 設定 首頁 路由
-app.get('/', (req, res) => {
-  Todo.find()
-    .lean()
-    .sort({ _id: 'asc' })
-    .then(todos => res.render('index', { todos }))
-    .catch(error => console.error(error))
-})
+// 將 request 導入路由器
+app.use(routes)
 
-// Create New todo to new-Page
-app.get('/todos/new', (req, res) => {
-  return res.render('new')
-})
+// 4 => 設定路由首頁 => 移到 home 模組
 
-app.post('/todos', (req, res) => {
-  const name = req.body.name
-  return Todo.create({ name })
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
+// Create New todo to new-Page => todos.js
 
-// Detail Page
-app.get('/todos/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .lean()
-    .then((todo) => res.render('detail', { todo }))
-    .catch(error => console.log(error))
-})
+// Detail Page => todos.js
 
-//Edit Page
-app.get('/todos/:id/edit', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .lean()
-    .then((todo) => res.render('edit', { todo }))
-    .catch(error => console.log(error))
-})
+// Edit Page => todos.js
 
-app.put('/todos/:id', (req, res) => {
-  const id = req.params.id
-  const { name, isDone } = req.body
-  return Todo.findById(id)
-    .then(todo => {
-      todo.name = name
-      todo.isDone = isDone === 'on'
-      return todo.save()
-    })
-    .then(() => res.redirect(`/todos/${id}`))
-    .catch(error => console.log(error))
-})
-// Delete Function
-app.delete('/todos/:id', (req, res) => {
-  const id = req.params.id
-  return Todo.findById(id)
-    .then(todo => todo.remove())
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
+// Delete Function => todos.js
 
 // 3 => 設定 port 3000
 // 伺服器啟動後，要開一個服務窗口，稱為埠 (port)
