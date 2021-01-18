@@ -2,6 +2,7 @@
 const express = require('express') // 1載入 express 模組
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 const mongoose = require('mongoose')
 const db = mongoose.connection
 
@@ -25,6 +26,9 @@ app.set('view engine', 'hbs')
 
 // Setting body-parser
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// Setting Method-override
+app.use(methodOverride('_method'))
 
 // 4 => 設定 首頁 路由
 app.get('/', (req, res) => {
@@ -65,7 +69,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
   return Todo.findById(id)
@@ -78,7 +82,7 @@ app.post('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 // Delete Function
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
