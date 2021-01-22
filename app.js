@@ -25,13 +25,9 @@ app.use(methodOverride('_method'))
 app.use(routes)
 
 // 4 => 設定路由首頁 => 移到 home 模組
-
 // Create New todo to new-Page => todos.js
-
 // Detail Page => todos.js
-
 // Edit Page => todos.js
-
 // Delete Function => todos.js
 
 // 3 => 設定 port 3000
