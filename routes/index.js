@@ -6,11 +6,13 @@ const router = express.Router()
 const home = require('./modules/home')
 // 引入 todos 模組程式碼
 const todos = require('./modules/todos')
+const users = require('./modules/users')
 
 // 將網址結構符合 / 字串的 request 導向 home 模組
 // 如果 request 路徑是 / 就去執行 modules/homes 裡的程式碼
 router.use('/', home)
 // 如果 req 路徑是 /todos 就去執行 modules/todos 裡的程式碼
 router.use('/todos', todos)
+router.use('/users', users)
 
 module.exports = router
